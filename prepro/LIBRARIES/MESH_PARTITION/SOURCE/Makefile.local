@@ -1,0 +1,130 @@
+################################################################################
+#
+#  NODE-PAIR CODE   -   Mesh Partition Library
+#
+#  Department of Aerospace Engineering
+#  Politecnico di Milano. 1995-2008
+#
+################################################################################
+
+SHELL	 = /bin/sh
+
+.SUFFIXES:
+.SUFFIXES: .f .f90 .o
+
+#-------------------------------------------------------------------------------
+# SETTING COMPILERS VARIABLES
+#-------------------------------------------------------------------------------
+VOID=
+CMPL_CFG_DIR=../../../SOLVER/SOURCE
+
+ifneq ($(CMPL),$(VOID))
+    
+  ifeq ($(DEBUG),yes)
+    include $(CMPL_CFG_DIR)/Makefile.$(CMPL).DBG
+  else
+    include $(CMPL_CFG_DIR)/Makefile.$(CMPL)    
+  endif
+    
+endif  
+
+#-------------------------------------------------------------------------------
+# FOLDERS
+#-------------------------------------------------------------------------------
+DV_DIR     = ../../DYNAMIC_VECTORS/SOURCE
+MPROC_DIR  = ../../MULTI_PROCESSOR/SOURCE
+MESH_DIR   = ../../MESH_STRUCTURES/SOURCE
+NPGEN_DIR  = ../../NODEPAIR_GENERATION/SOURCE
+NP_DIR     = ../../NODEPAIR_STRUCTURES/SOURCE
+ALG_DIR    = ../../ALGEBRA/SOURCE
+COMM_DIR   = ../../COMMONS/SOURCE
+FACES_DIR  = ../../FACES_GENERATION/SOURCE
+PRECOMP_DIR  = ../../PRECOMPILED
+
+DIRS = ./	    \
+       $(DV_DIR)    \
+       $(MPROC_DIR) \
+       $(MESH_DIR)  \
+       $(NPGEN_DIR) \
+       $(NP_DIR)    \
+       $(COMM_DIR) \
+       $(ALG_DIR) \
+       $(FACES_DIR)
+	      
+#----------------------------------------
+# EXTERNAL LIBRARIES
+#----------------------------------------
+DV_LIB    = $(DV_DIR)/libdyn_vec.a
+MPROC_LIB = $(MPROC_DIR)/libmproc.a
+MESH_LIB  = $(MESH_DIR)/libmesh.a
+NPGEN_LIB = $(NPGEN_DIR)/libnp_gen.a
+NP_LIB    = $(NP_DIR)/libnp.a
+ALG_LIB   = $(ALG_DIR)/libalgebra.a
+COMM_LIB   = $(COMM_DIR)/libcomm.a
+# System libraries
+METIS_LIB = $(PRECOMP_DIR)/libmetis.a
+FACES_LIB  = $(FACES_DIR)/libface_gen.a
+
+LIBS = $(DV_LIB)    \
+       $(MPROC_LIB) \
+       $(METIS_LIB) \
+       $(MESH_LIB)  \
+       $(NPGEN_LIB) \
+       $(NP_LIB)    \
+       $(COMM_LIB) \
+       $(ALG_LIB) \
+       $(FACES_LIB)
+
+#----------------------------------------
+# LOCAL OBJECTS
+#----------------------------------------
+OBJS = mesh_partition.o 
+
+#----------------------------------------
+# COMMANDS
+#----------------------------------------
+INCL_DIRS = $(INCL_CMD)$(DV_DIR)    \
+            $(INCL_CMD)$(MPROC_DIR) \
+            $(INCL_CMD)$(MESH_DIR)  \
+            $(INCL_CMD)$(NPGEN_DIR) \
+            $(INCL_CMD)$(NP_DIR)    \
+            $(INCL_CMD)$(COMM_DIR) \
+            $(INCL_CMD)$(ALG_DIR) \
+	    $(INCL_CMD)$(FACES_DIR)
+
+COMPILE = $(CMP90) $(OPT90) $(INCL_DIRS) 
+
+
+
+#----------------------------------------
+# MAIN RULES
+#----------------------------------------
+libmeshP.a: $(LIBS) $(OBJS)
+	($(AR) libmeshP.a $(OBJS); ranlib libmeshP.a)
+
+#----------------------------------------
+# OBJECTS AND LIBRARIES
+#----------------------------------------
+mesh_partition.o: $(LIBS) mesh_partition.f90
+	($(COMPILE) mesh_partition.f90)
+
+
+
+#-------------------------------------------------------------------------------
+# CLEANING
+#-------------------------------------------------------------------------------
+.PHONY: subs all clean cleanskit
+
+cleanLoc:
+	rm -f *.o *.mod *.exe *.a
+
+cleanAll:
+	@echo
+	@echo ' --------------------------------------------------------------------------'
+	@echo '   Cleaning objects and libs in PREREQUISITE folders'
+	@echo ' --------------------------------------------------------------------------'
+	@for dir in $(DIRS); do    \
+	echo Cleaning $$dir;       \
+	(cd $$dir; make cleanLoc); \
+	done
+	@echo

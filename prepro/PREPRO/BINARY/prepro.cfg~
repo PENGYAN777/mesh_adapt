@@ -1,0 +1,9 @@
+------------------------------------------------------------
+   PARAMETERS FOR NODE-PAIR GRID PREPROCESSING
+------------------------------------------------------------
+FlatPlate           ! Grid name
+.false.         ! Axial simmetry
+.true.   2      ! Partition grid, Nuber of CPUs
+.false.         ! Perform quality evaluation
+21              ! Number of bars in quality histogram
+10.0            ! Max value of Indicator

@@ -1,0 +1,95 @@
+################################################################################
+#
+#  NODE-PAIR CODE   -   Multi-Processor Library
+#
+#  Department of Aerospace Engineering
+#  Politecnico di Milano. 1995-2008
+#
+################################################################################
+
+SHELL	 = /bin/sh
+
+.SUFFIXES:
+.SUFFIXES: .f .f90 .o
+
+#-------------------------------------------------------------------------------
+# SETTING COMPILERS VARIABLES
+#-------------------------------------------------------------------------------
+VOID=
+CMPL_CFG_DIR=../../../PREPRO/SOURCE
+
+ifneq ($(CMPL),$(VOID))
+    
+  ifeq ($(DEBUG),yes)
+    include $(CMPL_CFG_DIR)/Makefile.$(CMPL).DBG
+  else
+    include $(CMPL_CFG_DIR)/Makefile.$(CMPL)    
+  endif
+    
+endif  
+
+#-------------------------------------------------------------------------------
+# FOLDERS
+#-------------------------------------------------------------------------------
+COMM_DIR = ../../COMMONS/SOURCE
+DV_DIR   = ../../DYNAMIC_VECTORS/SOURCE
+
+DIRS = ./         \
+       $(DV_DIR)  \
+       $(COMM_DIR)
+
+#----------------------------------------
+# EXTERNAL LIBRARIES
+#----------------------------------------
+DV_LIB   = $(DV_DIR)/libdyn_vec.a
+COMM_LIB = $(COMM_DIR)/libcomm.a
+
+LIBS = $(DV_LIB) $(COMM_LIB)
+
+#----------------------------------------
+# LOCAL OBJECTS
+#----------------------------------------
+OBJS = mp_interface.o
+
+#----------------------------------------
+# COMMANDS
+#----------------------------------------
+INCL_DIRS = $(INCL_CMD)$(DV_DIR) \
+            $(INCL_CMD)$(COMM_DIR)
+
+COMPILEF  = $(CMP90) $(OPT90) $(INCL_DIRS) -mismatch
+
+
+
+#----------------------------------------
+# MAIN RULES
+#----------------------------------------
+libmproc.a: $(LIBS) $(OBJS)
+	($(AR) libmproc.a $(OBJS); ranlib libmproc.a)
+
+#----------------------------------------
+# RULES FOR LOCAL OBJECTS
+#----------------------------------------
+mp_interface.o: $(LIBS) mp_interface.f90
+	($(COMPILEF) mp_interface.f90)
+
+
+
+#-------------------------------------------------------------------------------
+# CLEANING
+#-------------------------------------------------------------------------------
+.PHONY: cleanLoc cleanAll
+
+cleanLoc:
+	rm -f *.o *.mod *.exe *.a
+
+cleanAll:
+	@echo
+	@echo ' --------------------------------------------------------------------------'
+	@echo '   Cleaning objects and libs in PREREQUISITE folders'
+	@echo ' --------------------------------------------------------------------------'
+	@for dir in $(DIRS); do    \
+	echo Cleaning $$dir;       \
+	(cd $$dir; make cleanLoc); \
+	done
+	@echo

@@ -1,0 +1,22 @@
+################################################################################
+#
+#  NODE-PAIR CODE
+#
+#  department of Aerospace Engineering
+#  Politecnico di Milano. 1995-2008
+#
+################################################################################
+
+.PHONY: error
+
+error:
+	@echo ''
+	@echo ' USAGE:'
+	@echo ''
+	@echo ' make CMPL=MPich DEBUG=[debug_option]'
+	@echo ''
+	@echo ' debug_option = no'
+	@echo ' debug_option = yes'
+	@echo ''
+	@echo ''
+

@@ -31,7 +31,7 @@
 #F77 = cf77
 #AR = bld rv
 #OPT = -c -Wf"-dp" 
-F77 = ifort
+F77 = gfortran
 OPT = -O3 
 AR  = ar rcv
 OPT = -c -O2 -mismatch_all  

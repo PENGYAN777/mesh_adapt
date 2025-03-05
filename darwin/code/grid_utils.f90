@@ -270,9 +270,10 @@ MODULE  grid_utils
    c_j = invert_DIV(j_c_DIV)
 
    DEALLOCATE (j_c_DIV, j_c)    
-      
+    
 ! Guardone
-     IF (ASSOCIATED(grid % c_j)) DEALLOCATE (grid % c_j)
+   !IF (ASSOCIATED(grid % c_j)) DEALLOCATE (grid % c_j)
+   IF (ASSOCIATED(grid % c_j)) NULLIFY(grid % c_j)
 ! Guardone
    ALLOCATE (grid % c_j(grid % Nj_d))
     
@@ -286,7 +287,8 @@ MODULE  grid_utils
 
    ! C_M 
 ! Guardone
-     IF (ASSOCIATED(grid % c_m)) DEALLOCATE (grid % c_m)
+   !IF (ASSOCIATED(grid % c_m)) DEALLOCATE (grid % c_m)
+   IF (ASSOCIATED(grid % c_m)) NULLIFY(grid % c_m)
 ! Guardone
    ALLOCATE (grid % c_m(grid % Nm_d))
    grid % c_m = fv_c_m_connectivity(cmd, fv_fe)
@@ -297,7 +299,8 @@ MODULE  grid_utils
    m_c = invert_DIV(grid % c_m)
    
 ! Guardone
-     IF (ASSOCIATED(grid % m_c)) DEALLOCATE (grid % m_c)
+     !IF (ASSOCIATED(grid % m_c)) DEALLOCATE (grid % m_c)
+     IF (ASSOCIATED(grid % m_c))  NULLIFY(grid % m_c)
 ! Guardone
    ALLOCATE (grid % m_c(grid % Nc_d))
    

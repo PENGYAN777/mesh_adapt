@@ -52,15 +52,15 @@
    WRITE(ext,1000) entry_level
    1000 FORMAT (i7)
    ext = ADJUSTL(ext)
-         
+   
    WRITE (*,'(4x,a12,1x,i1,1x,a3)') 'Reading grid', entry_level, '...'
    entry_grid = Load_Grid(entry_level, grid_name, ext)
 
    solution = Load_Solution ( ad_params % sol_fmt, entry_grid % k_d,  &
      entry_grid % Nj_d, entry_grid % Nb, prob_name )
-  
+
    ALLOCATE ( add_solution(exit_level) )
-      
+
    write (*,*)
    write (*,'(4x,a21,1x,i1,1x,a8,1x,i1)') 'Adapt grid from level', entry_level, 'to level', exit_level
    exit_grid = Adapt_Grid(entry_grid, solution, ad_params, add_solution)

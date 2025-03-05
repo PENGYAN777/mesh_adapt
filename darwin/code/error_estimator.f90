@@ -529,7 +529,7 @@ MODULE error_estimator
   
   INTEGER                                      :: i, nd1, nd2, j, k
   REAL(KIND=8),    DIMENSION(2)                :: E_ij, V_ij
-  REAL(KIND=8)                                 :: u, v, w 
+  REAL(KIND=8)                                 :: u, v, w, G_Kv_mod 
   REAL(KIND=8)                                 :: equiv_rad
   REAL(KIND=8),    DIMENSION(2)                :: Tg, Nm
   REAL(KIND=8)                                 :: ddMT, ddMN    
@@ -554,9 +554,43 @@ MODULE error_estimator
     u = solution%ww(2,j)/solution%ww(1,j)
     v = solution%ww(3,j)/solution%ww(1,j)
     w = SQRT( u**2 + v**2 )  
+    PRINT*, 'modified '   
+    IF ( (w .EQ. 0.d0) .AND. (grid%jb_jd(1,j) .NE. 0) ) THEN   ! Wall Boundary Node
 
-    Tg(1) =  u / w;   Tg(2) = v / w    
-    Nm(1) = -Tg(2);   Nm(2) =  Tg(1)
+    Tg = Compute_Tangent_Vector(j, grid) ! Vector Tangent to boundary wall in node 'j'
+
+    Nm(1) = -Tg(2)
+    Nm(2) =  Tg(1)
+
+   ELSE  ! Node not belonging to a boundary wall
+
+    IF ( w .EQ. 0.d0 ) THEN
+
+     !PRINT*, 'WARNING. ERROR ESTIMATOR:'
+     !PRINT*, 'Velocity  is  zero somewhere inside the domain.'
+     !PRINT*, 'Considering GRADIENT VECTOR instead of VELOCITY'
+
+     G_Kv_mod = SQRT( G_Kv(1,j)**2 + G_Kv(2,j)**2 )
+
+     Tg(1) = G_Kv(1,j) / G_Kv_mod
+     Tg(2) = G_Kv(2,j) / G_Kv_mod
+
+     Nm(1) = -Tg(2)
+     Nm(2) =  Tg(1)
+
+    ELSE
+
+     Tg(1) =  u / w
+     Tg(2) =  v / w
+
+     Nm(1) = -Tg(2)
+     Nm(2) =  Tg(1)
+    ENDIF
+
+   ENDIF
+
+    !Tg(1) =  u / w;   Tg(2) = v / w    
+    !Nm(1) = -Tg(2);   Nm(2) =  Tg(1)
 
     equiv_rad = SQRT( grid%cell(j) )
 

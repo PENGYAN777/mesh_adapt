@@ -14,9 +14,9 @@ gfortran:
 	@echo "LNK_F90 = gfortran " >> Makefile.config
 #	@echo "FFLAGS = -O3" >> Makefile.config
 	@echo "FFLAGS = " >> Makefile.config
-	@echo "LIBS = ../libs/liblapack.a ../libs/libskit.a ../libs/libblas.a" >> Makefile.config
-	@echo "INCL = -lstdc++" >> Makefile.config
-#
+	@echo "LIBS = ../libs/liblapack.a ../libs/libskit.a ../libs/libblas.a ../libs/libkdtree2.a" >> Makefile.config
+#	@echo "INCL = -lstdc++" >> Makefile.config
+	@echo "INCL = -lstdc++ -I../incl" >> Makefile.config
 	@echo "Building DARWIN for ${SYS}..."
 	@echo "---------------------------------------------------------"
 	@echo
@@ -31,8 +31,8 @@ gfortran_dbg:
 	@echo "CMP_F90 = gfortran -c" > Makefile.config
 	@echo "LNK_F90 = gfortran " >> Makefile.config
 	@echo "FFLAGS = -g -Wall -fbacktrace" >> Makefile.config
-	@echo "LIBS = ../libs/liblapack.a ../libs/libskit.a ../libs/libblas.a" >> Makefile.config
-	@echo "INCL = -lstdc++" >> Makefile.config
+	@echo "LIBS = ../libs/liblapack.a ../libs/libskit.a ../libs/libblas.a ../libs/libkdtree2.a" >> Makefile.config
+	@echo "INCL = -lstdc++ -I../incl" >> Makefile.config
 #
 	@echo "Building DARWIN for ${SYS}..."
 	@echo "---------------------------------------------------------"

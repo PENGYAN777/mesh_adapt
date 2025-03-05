@@ -163,7 +163,6 @@ MODULE io_proc
     loaded_grid%adaptation_level = level
     loaded_grid%k_d  = k_d
     loaded_grid%Nb   = MAXVAL(bound_p)                   
-    
     ! Nodes
     loaded_grid%Nj_d = Np_d;  loaded_grid%Nj_b = Np_b
     ALLOCATE( loaded_grid%rr(k_d,Np_d)  )
@@ -175,7 +174,6 @@ MODULE io_proc
     loaded_grid%bound_p = bound_p           
     
     CALL Invert_jd_jb(loaded_grid)
-    
     ! Domain elements  
     loaded_grid % Nm_d = Ne_d
     loaded_grid % Nm_b = Ne_b                
@@ -183,11 +181,9 @@ MODULE io_proc
     ALLOCATE( loaded_grid%m_j_d(Np_d)  )
     ALLOCATE( loaded_grid%j_m_d(Ne_d)  )
     ALLOCATE( loaded_grid%ma_m_d(Ne_d) )
-   
     ! Inverting j_m_d
     ALLOCATE( m_j_d(size_DIV(j_m_d,3)) )
     m_j_d = invert_DIV( j_m_d )
-   
     DO i = 1, Np_d        
       ALLOCATE( loaded_grid%m_j_d(i)%vec(SIZE(m_j_d(i)%vec)) )      
       loaded_grid%m_j_d(i)%vec = m_j_d(i)%vec   
@@ -205,7 +201,6 @@ MODULE io_proc
 
     ALLOCATE( loaded_grid%ele_type_d(Ne_d) )
     loaded_grid%ele_type_d = ele_type_d
-    
     ! Boundary elements    
     loaded_grid%Nm_b = Ne_b;  loaded_grid%Nm_b = Ne_b                
     ALLOCATE( loaded_grid%m_j_b(Np_b)  )
@@ -293,9 +288,7 @@ MODULE io_proc
 
       ALLOCATE (loaded_grid%line(loaded_grid%Nb))
       loaded_grid%line = Load_Curves_Geometry(g_name)
-
     ENDIF
-                            
  END FUNCTION Load_grid
  
  

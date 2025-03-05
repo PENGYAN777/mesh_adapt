@@ -554,7 +554,7 @@ MODULE error_estimator
     u = solution%ww(2,j)/solution%ww(1,j)
     v = solution%ww(3,j)/solution%ww(1,j)
     w = SQRT( u**2 + v**2 )  
-    PRINT*, 'modified '   
+    !PRINT*, 'modified '   
     IF ( (w .EQ. 0.d0) .AND. (grid%jb_jd(1,j) .NE. 0) ) THEN   ! Wall Boundary Node
 
     Tg = Compute_Tangent_Vector(j, grid) ! Vector Tangent to boundary wall in node 'j'
